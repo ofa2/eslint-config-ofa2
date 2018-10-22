@@ -13,6 +13,7 @@ module.exports = {
         functions: 'never',
       },
     ],
+    'import/prefer-default-export': ['off'],
     'no-param-reassign': [
       'error',
       {
@@ -32,6 +33,7 @@ module.exports = {
       },
     ],
     'prefer-const': ['off'],
+    'prefer-default-export': ['off'],
     'space-before-function-paren': [
       'error',
       {
