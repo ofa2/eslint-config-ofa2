@@ -1,8 +1,11 @@
 {
-  "name": "@ofa2/eslint-config-ofa2",
-  "version": "1.0.2",
+  "name": "@ofa2/eslint-config",
+  "version": "2.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "echo 'no test'"
+  },
   "publishConfig": {
     "access": "public"
   }

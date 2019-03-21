@@ -1,17 +1,37 @@
-## TypeScript
+# ofa2 eslint config
 
-- 安装
+## Typescript rule
 
+### ts `npm install`
+
+```bash
+npm install --save-dev eslint typescript eslint-config-airbnb-base eslint-plugin-import @ofa2/eslint-config @typescript-eslint/eslint-plugin
 ```
-npm install --save-dev eslint typescript typescript-eslint-parser babel-eslint eslint-plugin-typescript eslint-config-airbnb-base eslint-plugin-import @ofa2/eslint-config-ofa2
-```
 
-- 使用 `.eslintrc.js`
+### ts config `.eslintrc.js`
 
 ```js
 module.exports = {
   globals: {},
-  extends: ['@ofa2/eslint-config-ofa2'],
+  extends: ['@ofa2/eslint-config'],
+  rules: {},
+};
+```
+
+## standard rule
+
+### `npm install`
+
+```bash
+npm install --save-dev eslint eslint-config-airbnb-base eslint-plugin-import @ofa2/eslint-config
+```
+
+### config `.eslintrc.js`
+
+```js
+module.exports = {
+  globals: {},
+  extends: ['@ofa2/eslint-config/rule-configs/index'],
   rules: {},
 };
 ```
