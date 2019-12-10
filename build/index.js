@@ -1,9 +1,10 @@
 const got = require('got');
-const { writeFile, access, ensureFile, ensureDir, readFile, copy, emptyDir } = require('fs-extra');
+const { writeFile, ensureDir, copy, emptyDir } = require('fs-extra');
 const { resolve: pathResolve } = require('path');
 const prettier = require('prettier');
 const airbnbBase = require('eslint-config-airbnb-base');
 const { parse: json5parse } = require('json5');
+const debug = require('debug')('build');
 
 const overrides = require('./overrides');
 
@@ -11,6 +12,10 @@ const ruleBaseHref =
   'https://raw.githubusercontent.com/typescript-eslint/typescript-eslint/master/packages/eslint-plugin/docs/rules/';
 const indexUrl =
   'https://raw.githubusercontent.com/typescript-eslint/typescript-eslint/master/packages/eslint-plugin/README.md';
+
+function json2lines(obj) {
+  return JSON.stringify(obj).replace(/^{|}$/g, '');
+}
 
 async function queryRules() {
   const { body } = await got(indexUrl, { encoding: 'utf8' });
@@ -32,19 +37,9 @@ function getUrl(rule) {
 
 async function getRuleDetail(rule) {
   const url = getUrl(rule);
-  const filePath = pathResolve(__dirname, `./rules/${rule}.md`);
 
-  try {
-    await access(filePath);
-    return readFile(filePath, { encoding: 'utf8' });
-  } catch (e) {
-    console.info('write', rule);
-    await ensureFile(filePath);
-    const { body } = await got(url, { encoding: 'utf8' });
-    await writeFile(filePath, body);
-
-    return body;
-  }
+  const { body } = await got(url, { encoding: 'utf8' });
+  return body;
 }
 
 function parseAirbnbBase() {
@@ -105,7 +100,7 @@ function getDisableBaseRuleContent(details) {
       return !!item;
     })
     .map((item) => {
-      return JSON.stringify(item).replace(/^{|}$/g, '');
+      return json2lines(item);
     })
     .join(',\n\n');
 }
@@ -119,13 +114,10 @@ async function buildEslintrc(disableBaseRuleContent) {
       'airbnb-base',
       'plugin:@typescript-eslint/recommended',
     ],
-    plugins: [],
-    globals: {},
     rules: {
       ${disableBaseRuleContent},
 
-      
-      ${JSON.stringify(overrides).replace(/^{|}$/g, '')}
+      ${json2lines(overrides)}
     },
   };
   `;
@@ -136,7 +128,8 @@ async function buildEslintrc(disableBaseRuleContent) {
   await ensureDir(distDir);
 
   const filePath = pathResolve(distDir, `./index.js`);
-  await writeFile(filePath, prettier.format(str, { singleQuote: true, parser: 'babel' }));
+  const content = prettier.format(str, { singleQuote: true, parser: 'babel' });
+  await writeFile(filePath, content);
 
   await Promise.all([
     copy(pathResolve(__dirname, `../package.json`), pathResolve(distDir, `./package.json`)),
@@ -148,7 +141,9 @@ async function buildEslintrc(disableBaseRuleContent) {
 }
 
 (async () => {
+  debug('requesting rules');
   const rules = await queryRules();
+  debug('rules length: ', rules.length);
 
   const details = await Promise.all(
     rules.map((rulePath) => {
@@ -157,8 +152,11 @@ async function buildEslintrc(disableBaseRuleContent) {
   );
 
   const str = getDisableBaseRuleContent(details);
+  debug('builing Eslintrc');
 
   await buildEslintrc(str);
+
+  debug('sucess');
 })().catch((e) => {
   console.warn(e);
 });
