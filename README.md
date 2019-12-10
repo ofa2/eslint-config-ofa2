@@ -1,37 +1,24 @@
 # ofa2 eslint config
 
-## Typescript rule
+## V2 版本
 
-### ts `npm install`
+[eslint-config-ofa2/tree/v2](https://github.com/ofa2/eslint-config-ofa2/tree/v2)
+
+## `npm install`
 
 ```bash
-npm install --save-dev eslint typescript eslint-config-airbnb-base eslint-plugin-import @ofa2/eslint-config @typescript-eslint/eslint-plugin
+npx install-peerdeps --dev @ofa2/eslint-config
 ```
 
-### ts config `.eslintrc.js`
+## config `.eslintrc.js`
 
 ```js
 module.exports = {
-  globals: {},
   extends: ['@ofa2/eslint-config'],
-  rules: {},
-};
-```
-
-## standard rule
-
-### `npm install`
-
-```bash
-npm install --save-dev eslint eslint-config-airbnb-base eslint-plugin-import @ofa2/eslint-config
-```
-
-### config `.eslintrc.js`
-
-```js
-module.exports = {
+  parserOptions: {
+    project: `./tsconfig.json`,
+  },
   globals: {},
-  extends: ['@ofa2/eslint-config/rule-configs/index'],
   rules: {},
 };
 ```
