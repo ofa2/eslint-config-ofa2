@@ -1,0 +1,17 @@
+{
+  "name": "build",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "eslint-config-airbnb-base": "^14.0.0",
+    "fs-extra": "^8.1.0",
+    "got": "^10.0.0-beta.3",
+    "prettier": "^1.19.1"
+  }
+}
