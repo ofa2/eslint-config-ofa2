@@ -3,6 +3,7 @@ const { writeFile, access, ensureFile, ensureDir, readFile, copy, emptyDir } = r
 const { resolve: pathResolve } = require('path');
 const prettier = require('prettier');
 const airbnbBase = require('eslint-config-airbnb-base');
+const { parse: json5parse } = require('json5');
 
 const overrides = require('./overrides');
 
@@ -84,18 +85,27 @@ function getDisableBaseRuleContent(details) {
     .map((item) => {
       return item.trim();
     })
-    .filter((item) => {
-      // 规则在airbnb中开启了, 需要关闭
-      const ruleName = item
-        .split(/[\r\n]/)[0]
-        .split(/:/)[0]
-        .trim()
-        .replace(/^"|"$/g, '');
+    .map((item) => {
+      const obj = json5parse(`{${item}}`);
+      return Object.entries(obj);
+    })
+    .map(([[baseRuleName], [tsRuleName]]) => {
+      // eslint core 的规则 要使用 ts的规则 替换
+      if (!airbnb[baseRuleName]) {
+        return undefined;
+      }
 
-      return !!airbnb[ruleName];
+      // 原来配置是什么, ts就复制配置
+      return {
+        [baseRuleName]: 'off',
+        [tsRuleName]: airbnb[baseRuleName],
+      };
+    })
+    .filter((item) => {
+      return !!item;
     })
     .map((item) => {
-      return item.replace(/,$/, '');
+      return JSON.stringify(item).replace(/^{|}$/g, '');
     })
     .join(',\n\n');
 }
