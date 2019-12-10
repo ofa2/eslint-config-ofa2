@@ -1,5 +1,5 @@
 const got = require('got');
-const { writeFile, access, ensureFile, readFile } = require('fs-extra');
+const { writeFile, access, ensureFile, ensureDir, readFile, copy, emptyDir } = require('fs-extra');
 const { resolve: pathResolve } = require('path');
 const prettier = require('prettier');
 const airbnbBase = require('eslint-config-airbnb-base');
@@ -120,10 +120,21 @@ async function buildEslintrc(disableBaseRuleContent) {
   };
   `;
 
-  const filePath = pathResolve(__dirname, `../index.js`);
-  await ensureFile(filePath);
+  const distDir = pathResolve(__dirname, '../dist/');
+  await emptyDir(distDir);
 
+  await ensureDir(distDir);
+
+  const filePath = pathResolve(distDir, `./index.js`);
   await writeFile(filePath, prettier.format(str, { singleQuote: true, parser: 'babel' }));
+
+  await Promise.all([
+    copy(pathResolve(__dirname, `../package.json`), pathResolve(distDir, `./package.json`)),
+    copy(
+      pathResolve(__dirname, `../package-lock.json`),
+      pathResolve(distDir, `./package-lock.json`)
+    ),
+  ]);
 }
 
 (async () => {
@@ -138,4 +149,6 @@ async function buildEslintrc(disableBaseRuleContent) {
   const str = getDisableBaseRuleContent(details);
 
   await buildEslintrc(str);
-})();
+})().catch((e) => {
+  console.warn(e);
+});

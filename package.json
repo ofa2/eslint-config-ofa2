@@ -3,9 +3,7 @@
   "version": "2.0.0",
   "main": "index.js",
   "license": "MIT",
-  "scripts": {
-    "build": "cd build && node index.js"
-  },
+  "scripts": {},
   "publishConfig": {
     "access": "public"
   },
