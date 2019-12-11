@@ -94,7 +94,7 @@ function getDisableBaseRuleContent(details) {
 
       // 原来配置是什么, ts就复制配置
       return {
-        [baseRuleName]: 'off',
+        [baseRuleName]: ['off'],
         [tsRuleName]: airbnb[baseRuleName],
       };
     })
@@ -114,6 +114,9 @@ async function buildEslintrc(disableBaseRuleContent) {
       'prettier',
       'prettier/@typescript-eslint',
       'airbnb-base',
+      'plugin:import/errors',
+      'plugin:import/warnings',
+      'plugin:import/typescript',
       'plugin:@typescript-eslint/recommended',
     ],
     rules: {
