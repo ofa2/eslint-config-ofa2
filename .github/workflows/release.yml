@@ -22,7 +22,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: build dist
-        working-directory: ./build
+        working-directory: ./
         run: |
           npm install
           npm run build --if-present
@@ -51,7 +51,7 @@ jobs:
         run: |
           mv dist-12 dist
           cd dist
-          npm ci
+          npm install
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}

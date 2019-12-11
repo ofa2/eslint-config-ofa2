@@ -19,7 +19,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: build
-        working-directory: ./build
+        working-directory: ./
         run: |
           npm install
           npm run build --if-present

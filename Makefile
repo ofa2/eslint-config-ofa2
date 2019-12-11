@@ -1,4 +1,4 @@
 .PHONY:*
 
 build:
-	node build/index.js
+	DEBUG=eslint-config npm run build

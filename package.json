@@ -1,11 +1,21 @@
 {
   "name": "@ofa2/eslint-config",
   "version": "3.1.0",
+  "description": "ofa2 eslint config",
   "main": "index.js",
+  "scripts": {
+    "build": "node src/index.js"
+  },
+  "author": "xinshangshangxin",
   "license": "MIT",
-  "scripts": {},
-  "publishConfig": {
-    "access": "public"
+  "dependencies": {
+    "debug": "^4.1.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "fs-extra": "^8.1.0",
+    "got": "^10.0.3",
+    "json5": "^2.1.1",
+    "lodash": "^4.17.15",
+    "prettier": "^1.19.1"
   },
   "peerDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.10.0",
@@ -14,5 +24,8 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-import": "^2.18.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

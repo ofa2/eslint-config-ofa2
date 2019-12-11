@@ -1,12 +1,14 @@
 const got = require('got');
-const { writeFile, ensureDir, copy, emptyDir } = require('fs-extra');
+const { writeFile, ensureDir, emptyDir, writeJSON } = require('fs-extra');
 const { resolve: pathResolve } = require('path');
 const prettier = require('prettier');
 const airbnbBase = require('eslint-config-airbnb-base');
 const { parse: json5parse } = require('json5');
-const debug = require('debug')('build');
+const { pick } = require('lodash');
+const debug = require('debug')('eslint-config');
 
 const overrides = require('./overrides');
+const pkg = require('../package.json');
 
 const ruleBaseHref =
   'https://raw.githubusercontent.com/typescript-eslint/typescript-eslint/master/packages/eslint-plugin/docs/rules/';
@@ -131,13 +133,22 @@ async function buildEslintrc(disableBaseRuleContent) {
   const content = prettier.format(str, { singleQuote: true, parser: 'babel' });
   await writeFile(filePath, content);
 
-  await Promise.all([
-    copy(pathResolve(__dirname, `../package.json`), pathResolve(distDir, `./package.json`)),
-    copy(
-      pathResolve(__dirname, `../package-lock.json`),
-      pathResolve(distDir, `./package-lock.json`)
-    ),
-  ]);
+  await writeJSON(
+    pathResolve(distDir, 'package.json'),
+    pick(pkg, [
+      'name',
+      'version',
+      'description',
+      'main',
+      'author',
+      'license',
+      'peerDependencies',
+      'publishConfig',
+    ]),
+    {
+      spaces: 2,
+    }
+  );
 }
 
 (async () => {
