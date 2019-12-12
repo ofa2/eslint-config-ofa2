@@ -16,7 +16,7 @@ npx install-peerdeps --dev @ofa2/eslint-config
 module.exports = {
   extends: ['@ofa2/eslint-config'],
   parserOptions: {
-    project: `./tsconfig.json`,
+    project: ['./tsconfig.json'],
   },
   globals: {},
   rules: {},
