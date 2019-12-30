@@ -8,5 +8,6 @@ module.exports = {
     'error',
     { overrides: { constructors: 'no-public' } },
   ],
+  '@typescript-eslint/indent': ['off'],
   '@typescript-eslint/no-explicit-any': ['off'],
 };

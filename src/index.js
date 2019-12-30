@@ -4,7 +4,7 @@ const { resolve: pathResolve } = require('path');
 const prettier = require('prettier');
 const airbnbBase = require('eslint-config-airbnb-base');
 const { parse: json5parse } = require('json5');
-const { pick } = require('lodash');
+const { pick, assign } = require('lodash');
 const debug = require('debug')('eslint-config');
 
 const overrides = require('./overrides');
@@ -61,7 +61,7 @@ function parseAirbnbBase() {
     }, {});
 }
 
-function getDisableBaseRuleContent(details) {
+function getDisableBaseRule(details) {
   const airbnb = parseAirbnbBase();
 
   return details
@@ -101,28 +101,26 @@ function getDisableBaseRuleContent(details) {
     .filter((item) => {
       return !!item;
     })
-    .map((item) => {
-      return json2lines(item);
-    })
-    .join(',\n\n');
+    .reduce((result, current) => {
+      assign(result, current);
+      return result;
+    }, {});
 }
 
-async function buildEslintrc(disableBaseRuleContent) {
+async function buildEslintrc(disableBaseRule) {
   const str = `
   module.exports = {
     extends: [
-      'plugin:prettier/recommended',
+      'plugin:@typescript-eslint/recommended',
       'prettier/@typescript-eslint',
       'airbnb-base',
       'plugin:import/errors',
       'plugin:import/warnings',
       'plugin:import/typescript',
-      'plugin:@typescript-eslint/recommended',
+      'plugin:prettier/recommended',
     ],
     rules: {
-      ${disableBaseRuleContent},
-
-      ${json2lines(overrides)}
+      ${json2lines(assign({}, disableBaseRule, overrides))}
     },
   };
   `;
@@ -165,10 +163,10 @@ async function buildEslintrc(disableBaseRuleContent) {
     })
   );
 
-  const str = getDisableBaseRuleContent(details);
+  const obj = getDisableBaseRule(details);
   debug('builing Eslintrc');
 
-  await buildEslintrc(str);
+  await buildEslintrc(obj);
 
   debug('sucess');
 })().catch((e) => {
