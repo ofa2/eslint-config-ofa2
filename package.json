@@ -1,6 +1,6 @@
 {
   "name": "@ofa2/eslint-config",
-  "version": "3.2.1",
+  "version": "3.2.2-0",
   "description": "ofa2 eslint config",
   "main": "index.js",
   "scripts": {
