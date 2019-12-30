@@ -111,7 +111,7 @@ async function buildEslintrc(disableBaseRuleContent) {
   const str = `
   module.exports = {
     extends: [
-      'prettier',
+      'plugin:prettier/recommended',
       'prettier/@typescript-eslint',
       'airbnb-base',
       'plugin:import/errors',
