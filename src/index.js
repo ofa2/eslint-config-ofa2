@@ -120,6 +120,22 @@ async function buildEslintrc(disableBaseRule) {
       'plugin:prettier/recommended',
     ],
     rules: {
+      'prettier/prettier': [
+        'error',
+        {
+          printWidth: 100,
+          tabWidth: 2,
+          useTabs: false,
+          semi: true,
+          singleQuote: true,
+          trailingComma: 'es5',
+          bracketSpacing: true,
+          jsxBracketSameLine: false,
+          arrowParens: 'always',
+          requirePragma: false,
+          insertPragma: false,
+        },
+      ],
       ${json2lines(assign({}, disableBaseRule, overrides))}
     },
   };
