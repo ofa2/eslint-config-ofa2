@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10, 12]
+        node-version: [12, 14]
 
     steps:
       - uses: actions/checkout@v1
@@ -40,16 +40,16 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
           registry-url: https://registry.npmjs.org/
 
       - uses: actions/download-artifact@v1
         with:
-          name: dist-12
+          name: dist-14
 
       - name: publish
         run: |
-          mv dist-12 dist
+          mv dist-14 dist
           cd dist
           npm install
           npm publish

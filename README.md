@@ -1,8 +1,8 @@
 # ofa2 eslint config
 
-## V2 版本
+## V3 版本
 
-[eslint-config-ofa2/tree/v2](https://github.com/ofa2/eslint-config-ofa2/tree/v2)
+[eslint-config-ofa2/tree/v3](https://github.com/ofa2/eslint-config-ofa2/tree/v3)
 
 ## `npm install`
 
