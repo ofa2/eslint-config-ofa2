@@ -8,6 +8,12 @@ module.exports = {
     'error',
     { overrides: { constructors: 'no-public' } },
   ],
+  '@typescript-eslint/explicit-module-boundary-types': [
+    'error',
+    {
+      allowArgumentsExplicitlyTypedAsAny: true,
+    },
+  ],
   '@typescript-eslint/indent': ['off'],
   '@typescript-eslint/no-explicit-any': ['off'],
 };

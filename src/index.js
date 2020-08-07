@@ -67,11 +67,11 @@ function getDisableBaseRule(details) {
   return details
     .map((content) => {
       if (
-        /{[^{}]*?note you must disable the base rule as it can report incorrect errors([\d\D]*?)}\s*[\r\n]/.test(
+        /```(jsonc|cjson)[\r\n]{[^{}]*?note you must disable the base rule as it can report incorrect errors([\d\D]*?)}\s*[\r\n]```/.test(
           content
         )
       ) {
-        return RegExp.$1;
+        return RegExp.$2;
       }
 
       return undefined;
